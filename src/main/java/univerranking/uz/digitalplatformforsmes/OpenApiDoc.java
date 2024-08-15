@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
         ),
         servers = @Server(
                 description = "Local En",
-                url = "http://localhost:8090"
+                url = "http://https://digitalplatformforsmes.onrender.com"
         )
         //security =
 )
