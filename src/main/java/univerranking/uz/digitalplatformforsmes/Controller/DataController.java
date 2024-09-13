@@ -4,12 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import univerranking.uz.digitalplatformforsmes.Dto.DataRequest;
+import univerranking.uz.digitalplatformforsmes.Utils.RestConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/data")
+@RequestMapping(RestConstants.PATH+"/data")
 public class DataController {
 
     @PostMapping("/upload")
@@ -27,7 +28,7 @@ public class DataController {
     @GetMapping
     public ResponseEntity<List<DataRequest>> getAllData() {
         // Logic to retrieve all datasets
-        return ResponseEntity.ok(new ArrayList<>());
+        return ResponseEntity.status(200).build();
     }
 
     @DeleteMapping("/{id}")

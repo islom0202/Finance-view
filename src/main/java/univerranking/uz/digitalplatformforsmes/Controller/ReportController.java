@@ -10,7 +10,8 @@ import univerranking.uz.digitalplatformforsmes.Dto.ReportRequest;
 public class ReportController {
 
     @GetMapping("/{type}")
-    public ResponseEntity<byte[]> generateReport(@PathVariable String type, @RequestParam Long dataId) {
+    public ResponseEntity<byte[]> generateReport(@PathVariable String type,
+                                                 @RequestParam Long dataId) {
         // Logic to generate and return a specific report
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(new byte[0]);
     }

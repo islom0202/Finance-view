@@ -7,20 +7,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import univerranking.uz.digitalplatformforsmes.Dto.JwtToken;
 import univerranking.uz.digitalplatformforsmes.Dto.LoginRequest;
+import univerranking.uz.digitalplatformforsmes.Jwt.JwtTokenProvider;
 import univerranking.uz.digitalplatformforsmes.Utils.RestConstants;
 
 @RestController
-@RequestMapping(RestConstants.PATH+"/api/auth")
+@RequestMapping(RestConstants.PATH + "/auth")
 @AllArgsConstructor
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping
     public ResponseEntity<JwtToken> login(@RequestBody LoginRequest request) {
@@ -35,11 +38,12 @@ public class AuthController {
                     request.getPassword()
             );
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            //String token =
-
-                return ResponseEntity.ok(new JwtToken("xcsdcascd"));
-//                        .header("Authorization", "Bearer " + token)
-//                        .body(new JwtToken(token));
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String accessToken = jwtTokenProvider.generateToken(userDetails);
+            String refreshToken = jwtTokenProvider.generateRefreshToken(userDetails);
+            return ResponseEntity.ok()
+                    .header("Authorization", "Bearer " + accessToken)
+                    .body(new JwtToken(accessToken, refreshToken));
 
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
